@@ -47,11 +47,11 @@ namespace czyminode {
         var rgb2: number =rgb;
 
         for (i = 0; i < num; i++) {
-            if ((rgb2 & (1 << 23))!=0)
+            if ((rgb2 & 0x800000)!=0)
                 data.digitalWrite(true);
             else
                 data.digitalWrite(false);
-            rgb2 <<= 1;
+            rgb2 = rgb2 << 1;
 
             clock.digitalWrite(true);
             clock.digitalWrite(false);
