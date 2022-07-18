@@ -38,13 +38,14 @@ namespace czyminode {
 
         const clock: DigitalInOutPin = new MicrobitPin(DigitalPin.P12);
         const data: DigitalInOutPin = new MicrobitPin(DigitalPin.P13);
+        var num: number = 24;
+        var i: number = 0;
+        var rgb2: number = rgb;
+
         clock.digitalWrite(false);
         data.digitalWrite(false);
 
 
-        let num = 24;
-        let i=0;
-        let rgb2 =rgb;
 
         for (i = 0; i < num; i++) {
             if ((rgb2 & 0x800000)!=0)
