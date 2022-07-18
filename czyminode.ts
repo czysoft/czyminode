@@ -47,7 +47,7 @@ namespace czyminode {
         var rgb2: number =rgb;
 
         for (i = 0; i < num; i++) {
-            if (rgb2 & (1 << 23))
+            if ((rgb2 & (1 << 23))!=0)
                 data.digitalWrite(true);
             else
                 data.digitalWrite(false);
