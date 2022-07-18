@@ -34,7 +34,7 @@ namespace czyminode {
      */
     //% blockId=RGB±äÉ«µÆ
     //% block
-    export function RGBLed(rgb: uint32): void {
+    export function RGBLed(rgb: number): void {
 
         const clock: DigitalInOutPin = new MicrobitPin(DigitalPin.P12);
         const data: DigitalInOutPin = new MicrobitPin(DigitalPin.P13);
@@ -44,7 +44,7 @@ namespace czyminode {
 
         var num: number = 24;
         var i: number;
-        var rgb2: uint32=rgb;
+        var rgb2: number =rgb;
 
         for (i = 0; i < num; i++) {
             if (rgb2 & (1 << 23))
