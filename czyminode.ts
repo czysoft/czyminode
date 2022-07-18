@@ -30,7 +30,7 @@ namespace czyminode {
 
 
     /**
-     * RGBLED
+     * RGBLed
      */
     //% blockId=RGB±äÉ«µÆ
     //% block
