@@ -36,11 +36,11 @@ namespace czyminode {
     //% block
     export function RgbLed(rgb: number): void {
 
+        let num: number = 24;
+        let i: number = 0;
+        let rgb2: number = rgb;
         const clock: DigitalInOutPin = new MicrobitPin(DigitalPin.P12);
         const data: DigitalInOutPin = new MicrobitPin(DigitalPin.P13);
-        var num: number = 24;
-        var i: number = 0;
-        var rgb2: number = rgb;
 
         clock.digitalWrite(false);
         data.digitalWrite(false);
