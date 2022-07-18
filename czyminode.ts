@@ -42,9 +42,9 @@ namespace czyminode {
         data.digitalWrite(false);
 
 
-        var num: number = 24;
-        var i: number;
-        var rgb2: number =rgb;
+        let num: number = 24;
+        let i: number;
+        let rgb2: number =rgb;
 
         for (i = 0; i < num; i++) {
             if ((rgb2 & 0x800000)!=0)
