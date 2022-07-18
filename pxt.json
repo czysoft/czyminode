@@ -1,0 +1,27 @@
+{
+    "name": "czyminode",
+    "version": "0.0.0",
+    "description": "stm32 minode ...",
+    "license": "MIT",
+    "dependencies": {
+        "core": "*",
+        "radio": "*",
+        "microphone": "*"
+    },
+    "files": [
+        "README.md",
+        "main.blocks",
+        "czyminode.ts",
+        "shims.d.ts",
+        "enums.d.ts"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "public": true,
+    "supportedTargets": [
+        "microbit"
+    ],
+    "preferredEditor": "blocksprj"
+    
+}
