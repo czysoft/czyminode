@@ -7,7 +7,7 @@ namespace czyminode {
 	/**
      * FanOn
      */
-    //% blockId=turn on fan
+    //% blockId=turn_on_fan
     //% block
     export function FanOn(): void{
         const p0: DigitalInOutPin = new MicrobitPin(DigitalPin.P0);
@@ -19,7 +19,7 @@ namespace czyminode {
 	/**
      * FanOff
      */
-    //% blockId=turn off fan
+    //% blockId=turn_off_fan
     //% block
     export function FanOff(): void {
         const p0: DigitalInOutPin = new MicrobitPin(DigitalPin.P0);
@@ -32,7 +32,7 @@ namespace czyminode {
     /**
      * RgbLed
      */
-    //% blockId=RGB light
+    //% blockId=RGB_light
     //% block
     export function RgbLed(rgb: number): void {
 
