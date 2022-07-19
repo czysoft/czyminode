@@ -10,9 +10,9 @@ namespace czyminode {
     //% blockId=turn_on_fan
     //% block
     export function FanOn(): void{
-        const p0: DigitalInOutPin = new MicrobitPin(DigitalPin.P0);
+        let p0: DigitalInOutPin = new MicrobitPin(DigitalPin.P0);
         p0.digitalWrite(true);
-        const p1: DigitalInOutPin = new MicrobitPin(DigitalPin.P1);
+        let p1: DigitalInOutPin = new MicrobitPin(DigitalPin.P1);
         p1.digitalWrite(false);        
     }
 
@@ -22,12 +22,14 @@ namespace czyminode {
     //% blockId=turn_off_fan
     //% block
     export function FanOff(): void {
-        const p0: DigitalInOutPin = new MicrobitPin(DigitalPin.P0);
+        let p0: DigitalInOutPin = new MicrobitPin(DigitalPin.P0);
         p0.digitalWrite(false);
-        const p1: DigitalInOutPin = new MicrobitPin(DigitalPin.P1);
+        let p1: DigitalInOutPin = new MicrobitPin(DigitalPin.P1);
         p1.digitalWrite(true);     
     }
-
+    function delay(): void {
+        basic.pause(1);
+    }
 
     /**
      * RgbLed
@@ -39,13 +41,24 @@ namespace czyminode {
         let num: number = 24;
         let i: number = 0;
         let rgb2: number = rgb;
-        const clock: DigitalInOutPin = new MicrobitPin(DigitalPin.P12);
-        const data: DigitalInOutPin = new MicrobitPin(DigitalPin.P13);
-
+        let clock: DigitalInOutPin = new MicrobitPin(DigitalPin.P12);
+        let data: DigitalInOutPin = new MicrobitPin(DigitalPin.P13);
+        //console.log("RgbLed start");
         clock.digitalWrite(false);
+
         data.digitalWrite(false);
 
+        //console.log("RgbLed inited");
 
+
+        for (i = 0; i < 32; i++) {
+            data.digitalWrite(false);
+
+            clock.digitalWrite(true);
+            delay();
+            clock.digitalWrite(false);
+            delay();
+        }
 
         for (i = 0; i < num; i++) {
             if ((rgb2 & 0x800000)!=0)
@@ -55,7 +68,10 @@ namespace czyminode {
             rgb2 = rgb2 << 1;
 
             clock.digitalWrite(true);
+            delay();
             clock.digitalWrite(false);
+            delay();
+            //console.log("RgbLed loop "+i.toString());
         }
 
 
