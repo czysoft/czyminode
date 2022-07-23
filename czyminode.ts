@@ -613,4 +613,58 @@ namespace czyminode {
         return p0.digitalRead();
     }
 
+    /**
+     * Do something when Light level change.
+     */
+    //% blockId=minode_on_LightSensor_CHANGE block="light %connName| on change"
+    export function onLightSensorEvent(connName: ConnNameA, body: () => void): void {
+        let p0: AnalogInPin;
+        let p1: AnalogInPin;
+        if (connName == ConnNameA.A0) {
+            p0 = new MicrobitPin(DigitalPin.P0);
+            p1 = new MicrobitPin(DigitalPin.P1);
+        }
+        else if (connName == ConnNameA.A1) {
+            p0 = new MicrobitPin(DigitalPin.P1);
+            p1 = new MicrobitPin(DigitalPin.P2);
+        }
+        else if (connName == ConnNameA.A2) {
+            p0 = new MicrobitPin(DigitalPin.P2);
+            p1 = new MicrobitPin(DigitalPin.P3);
+        }
+        let light: number = p0.analogRead();
+        let lastlight: number = light;
+        loops.everyInterval(200, () => {
+            light = p0.analogRead();
+            if (Math.abs(light - lastlight) > 100)
+                body();
+            lastlight = light;
+        });
+        return;
+    }
+
+    /**
+     * Get Light level.from 1(brightest) to 5(darkness).
+     */
+    //% blockId=minode_LightSensor_GET_light_level block="light %connName| get level"
+    export function LightSensorGetLevel(connName: ConnNameA): number {
+        let p0: AnalogInPin;
+        let p1: AnalogInPin;
+        if (connName == ConnNameA.A0) {
+            p0 = new MicrobitPin(DigitalPin.P0);
+            p1 = new MicrobitPin(DigitalPin.P1);
+        }
+        else if (connName == ConnNameA.A1) {
+            p0 = new MicrobitPin(DigitalPin.P1);
+            p1 = new MicrobitPin(DigitalPin.P2);
+        }
+        else if (connName == ConnNameA.A2) {
+            p0 = new MicrobitPin(DigitalPin.P2);
+            p1 = new MicrobitPin(DigitalPin.P3);
+        }
+        let light: number = p0.analogRead();
+
+        return  6-Math.floor( light/(1024/6));
+    }
+
 }
