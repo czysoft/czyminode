@@ -349,13 +349,13 @@ namespace czyminode {
 
     /**
      * Do something when DHT11 temperature change.
-     */
+     
     //% blockId=minode_on_dhttemperature_change block="dht11 %connName| on temperature change"
     //% advanced=true
     export function onDHTEvent(connName: ConnNameD, body: () => void): void {
         return;
     }
-
+    */
     /**
      * Do something when a switch is opened/closed
      * @param switchId a switch ID .
@@ -435,4 +435,59 @@ namespace czyminode {
         return p0.digitalRead();
     }
 
+    /**
+     * Do something when MIC level change.
+     */
+    //% blockId=minode_on_MIC_level_change block="mic %connName| > %vol | on noise"
+    //% advanced=true
+    export function onMICEvent(connName: ConnNameA,vol:number, body: () => void): void {
+        let p0: AnalogInPin;
+        let p1: AnalogInPin;
+
+        if (connName == ConnNameA.A0) {
+            p0 = new MicrobitPin(DigitalPin.P0);
+            p1 = new MicrobitPin(DigitalPin.P1);
+        }
+        else if (connName == ConnNameA.A1) {
+            p0 = new MicrobitPin(DigitalPin.P1);
+            p1 = new MicrobitPin(DigitalPin.P2);
+        }
+        else if (connName == ConnNameA.A2) {
+            p0 = new MicrobitPin(DigitalPin.P2);
+            p1 = new MicrobitPin(DigitalPin.P3);
+        }
+
+        loops.everyInterval(50, function () {
+            let v:number = p0.analogRead();
+            if (Math.abs(v-518) > vol) {
+                body();
+                return;
+            }
+
+        });
+        return;
+    }
+
+    /**
+     * Get Mic Volume.
+     */
+    //% blockId=Mic_Get_Vol block="mic %connName| Volume"
+    //% advanced=true
+    export function MicGetVol(connName: ConnNameA): number {
+        let p0: AnalogInPin;
+        let p1: AnalogInPin;
+        if (connName == ConnNameA.A0) {
+            p0 = new MicrobitPin(DigitalPin.P0);
+            p1 = new MicrobitPin(DigitalPin.P1);
+        }
+        else if (connName == ConnNameA.A1) {
+            p0 = new MicrobitPin(DigitalPin.P1);
+            p1 = new MicrobitPin(DigitalPin.P2);
+        }
+        else if (connName == ConnNameA.A2) {
+            p0 = new MicrobitPin(DigitalPin.P2);
+            p1 = new MicrobitPin(DigitalPin.P3);
+        }
+        return p0.analogRead();
+    }
 }
