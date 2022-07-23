@@ -550,4 +550,67 @@ namespace czyminode {
         return p0.analogRead()*100/567;
     }
 
+    /**
+     * Do something when PIR triggered.
+     */
+    //% blockId=minode_on_PIR_trig block="pir %connName| on trigger"
+    //% advanced=true
+    export function onPIREvent(connName: ConnNameD, body: () => void): void {
+        let p0: DigitalInOutPin;
+        let p1: DigitalInOutPin;
+        if (connName == ConnNameD.D12) {
+            p0 = new MicrobitPin(DigitalPin.P12);
+            p1 = new MicrobitPin(DigitalPin.P13);
+        }
+        else if (connName == ConnNameD.D13) {
+            p0 = new MicrobitPin(DigitalPin.P13);
+            p1 = new MicrobitPin(DigitalPin.P14);
+        }
+        else if (connName == ConnNameD.D14) {
+            p0 = new MicrobitPin(DigitalPin.P14);
+            p1 = new MicrobitPin(DigitalPin.P15);
+        }
+        else if (connName == ConnNameD.D15) {
+            p0 = new MicrobitPin(DigitalPin.P15);
+            p1 = new MicrobitPin(DigitalPin.P16);
+        }
+        let lastState: boolean = false;
+        let state: boolean;
+        loops.everyInterval(200, () => {
+            state = p0.digitalRead();
+            if (state == true && lastState == false) {
+                body();
+            }
+            lastState = state;
+        });
+        return;
+    }
+
+    /**
+     * Get the PIR state (trigger or not).
+     */
+    //% blockId=minode_PIR_istrig block="pir %connName| is triggered"
+    //% advanced=true
+    export function PIRIsTriggered(connName: ConnNameD): boolean {
+        let p0: DigitalInOutPin;
+        let p1: DigitalInOutPin;
+        if (connName == ConnNameD.D12) {
+            p0 = new MicrobitPin(DigitalPin.P12);
+            p1 = new MicrobitPin(DigitalPin.P13);
+        }
+        else if (connName == ConnNameD.D13) {
+            p0 = new MicrobitPin(DigitalPin.P13);
+            p1 = new MicrobitPin(DigitalPin.P14);
+        }
+        else if (connName == ConnNameD.D14) {
+            p0 = new MicrobitPin(DigitalPin.P14);
+            p1 = new MicrobitPin(DigitalPin.P15);
+        }
+        else if (connName == ConnNameD.D15) {
+            p0 = new MicrobitPin(DigitalPin.P15);
+            p1 = new MicrobitPin(DigitalPin.P16);
+        }
+        return p0.digitalRead();
+    }
+
 }
