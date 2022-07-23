@@ -465,6 +465,7 @@ namespace czyminode {
             }
 
         });
+
         return;
     }
 
@@ -490,4 +491,63 @@ namespace czyminode {
         }
         return p0.analogRead();
     }
+
+
+    /**
+     * Do something when Rotary change.
+     */
+    //% blockId=minode_on_ROTARY_CHANGE block="rotary %connName| on trigger"
+    export function onRotaryEvent(connName: ConnNameA, body: () => void): void {
+        let lastVal: number;
+        let p0: AnalogInPin;
+        let p1: AnalogInPin;
+        if (connName == ConnNameA.A0) {
+            p0 = new MicrobitPin(DigitalPin.P0);
+            p1 = new MicrobitPin(DigitalPin.P1);
+        }
+        else if (connName == ConnNameA.A1) {
+            p0 = new MicrobitPin(DigitalPin.P1);
+            p1 = new MicrobitPin(DigitalPin.P2);
+        }
+        else if (connName == ConnNameA.A2) {
+            p0 = new MicrobitPin(DigitalPin.P2);
+            p1 = new MicrobitPin(DigitalPin.P3);
+        }
+        lastVal = p0.analogRead();
+        loops.everyInterval(200, function () {
+            let v: number = p0.analogRead();
+            if (Math.abs(lastVal - v) > 10) {
+                lastVal = v;
+                body();
+                return;
+            }
+
+        });
+        return;
+    }
+
+    /**
+     * Get Rotary percentage.
+     */
+    //% blockId=minode_ROTARY_GET_Percentage block="rotary %connName| get Percentage"
+    //% advanced=true
+    export function RotaryGetPercentage(connName: ConnNameA): number {
+        let p0: AnalogInPin;
+        let p1: AnalogInPin;
+        if (connName == ConnNameA.A0) {
+            p0 = new MicrobitPin(DigitalPin.P0);
+            p1 = new MicrobitPin(DigitalPin.P1);
+        }
+        else if (connName == ConnNameA.A1) {
+            p0 = new MicrobitPin(DigitalPin.P1);
+            p1 = new MicrobitPin(DigitalPin.P2);
+        }
+        else if (connName == ConnNameA.A2) {
+            p0 = new MicrobitPin(DigitalPin.P2);
+            p1 = new MicrobitPin(DigitalPin.P3);
+        }
+
+        return p0.analogRead()*100/567;
+    }
+
 }
