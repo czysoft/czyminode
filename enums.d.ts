@@ -53,6 +53,13 @@ declare namespace czyminode {
         //% block="D15" enumval=7
         D15 = 7
     }
+
+    const enum SwitchStatus {
+        //% block="open" enumval=1
+        SWITCH_OPEN = 1,
+        //% block="close" enumval=2
+        SWITCH_CLOSE = 2,
+    }
 }
 
 // Auto-generated. Do not edit. Really.

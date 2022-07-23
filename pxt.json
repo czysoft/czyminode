@@ -13,7 +13,8 @@
         "main.blocks",
         "czyminode.ts",
         "shims.d.ts",
-        "enums.d.ts"
+      "enums.d.ts",
+      "libs/speaker.cpp"
     ],
     "testFiles": [
         "test.ts"

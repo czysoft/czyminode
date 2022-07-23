@@ -131,14 +131,37 @@ namespace czyminode {
      */
     //% blockId=Speaker_Out
     //% block
-    export function SpeakerOut(ConnName: ConnNameD, vol: number): void {
-        let p1: AnalogOutPin = new MicrobitPin(DigitalPin.P1);
-        let p2: AnalogOutPin = new MicrobitPin(DigitalPin.P2);
+    export function SpeakerOut(ConnName: ConnNameA, vol: number): void {
+        let p0: AnalogOutPin;
+        let p1: AnalogOutPin;
 
+        if (ConnName == ConnNameA.A0) {
+            p0 = new MicrobitPin(DigitalPin.P0);
+            p1 = new MicrobitPin(DigitalPin.P1);
+        }
+        else if (ConnName == ConnNameA.A1) {
+            p0 = new MicrobitPin(DigitalPin.P1);
+            p1 = new MicrobitPin(DigitalPin.P2);
+        }
+        else if (ConnName == ConnNameA.A2) {
+            p0 = new MicrobitPin(DigitalPin.P2);
+            p1 = new MicrobitPin(DigitalPin.P3);
+        }
+
+        p0.analogWrite(vol);
         p1.analogWrite(vol);
-        p2.analogWrite(vol);
     }
-    
+
+    /**
+     * test
+     */
+    //% blockId=test
+    //% block
+    //% shim=speaker::test
+    export function test(a: number, b: number): number {
+        return 0;
+    }
+
 
     /**
      * Get DHT11 temperature (celsius or fahrenheit).
@@ -667,4 +690,31 @@ namespace czyminode {
         return  6-Math.floor( light/(1024/6));
     }
 
+    /**
+     * relay control(open / close)
+     */
+    //% blockId=minode_relay_control block="relay %connName| set %status"
+    //% advanced=true
+    export function RelayControl(connName: ConnNameD, status: SwitchStatus): void {
+
+        let p0: DigitalInOutPin;
+        let p1: DigitalInOutPin;
+        if (connName == ConnNameD.D12) {
+            p0 = pins.P12;
+            p1 = pins.P13;
+        }
+        else if (connName == ConnNameD.D13) {
+            p0 = new MicrobitPin(DigitalPin.P13);
+            p1 = new MicrobitPin(DigitalPin.P14);
+        }
+        else if (connName == ConnNameD.D14) {
+            p0 = new MicrobitPin(DigitalPin.P14);
+            p1 = new MicrobitPin(DigitalPin.P15);
+        }
+        else if (connName == ConnNameD.D15) {
+            p0 = new MicrobitPin(DigitalPin.P15);
+            p1 = new MicrobitPin(DigitalPin.P16);
+        }
+        p0.digitalWrite(status == SwitchStatus.SWITCH_OPEN);
+    }
 }
