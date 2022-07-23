@@ -352,8 +352,7 @@ namespace czyminode {
      */
     //% blockId=minode_on_dhttemperature_change block="dht11 %connName| on temperature change"
     //% advanced=true
-    //% shim=minode::onDHTEvent
-    export function onDHTEvent(connName: ConnNames, body: () => void): void {
+    export function onDHTEvent(connName: ConnNameD, body: () => void): void {
         return;
     }
 
@@ -364,7 +363,48 @@ namespace czyminode {
      * @param event Event to listen
      */
     //% blockId=minode_on_switch_event block="switch %connName| on %event"
-    export function onSwitchEvent(connName: ConnNames, event: SwitchEvent, body: () => void): void {
+    export function onSwitchEvent(connName: ConnNameD, event: SwitchEvent, body: () => void): void {
+        
+        let p0: DigitalInOutPin;
+        let p1: DigitalInOutPin;
+        let lastV: boolean;
+        let V: boolean;
+        let i: number;
+        if (connName == ConnNameD.D12) {
+            p0 = pins.P12;
+            p1 = pins.P13;
+        }
+        else if (connName == ConnNameD.D13) {
+            p0 = new MicrobitPin(DigitalPin.P13);
+            p1 = new MicrobitPin(DigitalPin.P14);
+        }
+        else if (connName == ConnNameD.D14) {
+            p0 = new MicrobitPin(DigitalPin.P14);
+            p1 = new MicrobitPin(DigitalPin.P15);
+        }
+        else if (connName == ConnNameD.D15) {
+            p0 = new MicrobitPin(DigitalPin.P15);
+            p1 = new MicrobitPin(DigitalPin.P16);
+        }
+        //console.log("set switch event");
+        lastV = p0.digitalRead();
+        loops.everyInterval(1000, function () {
+            V = pins.P12.digitalRead();
+            if ((event == SwitchEvent.MINODE_SWITCH_EVT_CLOSE) && (lastV!=V) && (V== false)) {
+                //console.log("switch event close");
+                body();
+                lastV = V;
+                return;
+            }
+            else if ((event == SwitchEvent.MINODE_SWITCH_EVT_OPEN) && (lastV != V) && (V == true)) {
+                //console.log("switch event open");
+                body();
+                lastV = V;
+                return;
+            }
+            lastV = V;
+            //console.log("switch check event:" + event + " V:" + pins.P12.digitalRead() + " V2:" + pins.P13.digitalRead() + " lastV:" + lastV);
+        })
         return;
     }
 
@@ -373,8 +413,26 @@ namespace czyminode {
      */
     //% blockId=minode_switch_is_opened block="switch %connName| is opened"
     //% advanced=true
-    export function switchIsOpened(connName: ConnNames): boolean {
-        return true;
+    export function switchIsOpened(connName: ConnNameD): boolean {
+        let p0: DigitalInOutPin;
+        let p1: DigitalInOutPin;
+        if (connName == ConnNameD.D12) {
+            p0 = new MicrobitPin(DigitalPin.P12);
+            p1 = new MicrobitPin(DigitalPin.P13);
+        }
+        else if (connName == ConnNameD.D13) {
+            p0 = new MicrobitPin(DigitalPin.P13);
+            p1 = new MicrobitPin(DigitalPin.P14);
+        }
+        else if (connName == ConnNameD.D14) {
+            p0 = new MicrobitPin(DigitalPin.P14);
+            p1 = new MicrobitPin(DigitalPin.P15);
+        }
+        else if (connName == ConnNameD.D15) {
+            p0 = new MicrobitPin(DigitalPin.P15);
+            p1 = new MicrobitPin(DigitalPin.P16);
+        }
+        return p0.digitalRead();
     }
 
 }
