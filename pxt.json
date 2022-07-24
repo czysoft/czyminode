@@ -8,13 +8,14 @@
         "radio": "*",
         "microphone": "*"
     },
-    "files": [
-        "README.md",
-        "main.blocks",
-        "czyminode.ts",
-        "shims.d.ts",
-      "enums.d.ts"
-    ],
+  "files": [
+    "README.md",
+    "main.blocks",
+    "czyminode.ts",
+    "shims.d.ts",
+    "enums.d.ts",
+    "libs/czyminode.cpp"
+  ],
     "testFiles": [
         "test.ts"
     ],

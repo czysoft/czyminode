@@ -13,16 +13,16 @@ namespace czyminode {
         let p0: DigitalInOutPin;
         let p1: DigitalInOutPin;
 
-        if (ConnName == ConnNameA.A0)
+        if (ConnName == ConnNameA.ConnNameA_A0)
         {
             p0= new MicrobitPin(DigitalPin.P0);
             p1 = new MicrobitPin(DigitalPin.P1);
         }
-        else if (ConnName == ConnNameA.A1) {
+        else if (ConnName == ConnNameA.ConnNameA_A1) {
             p0 = new MicrobitPin(DigitalPin.P1);
             p1 = new MicrobitPin(DigitalPin.P2);
         }
-        else if (ConnName == ConnNameA.A2) {
+        else if (ConnName == ConnNameA.ConnNameA_A2) {
             p0 = new MicrobitPin(DigitalPin.P2);
             p1 = new MicrobitPin(DigitalPin.P3);
         }
@@ -40,15 +40,15 @@ namespace czyminode {
         let p0: DigitalInOutPin;
         let p1: DigitalInOutPin;
 
-        if (ConnName == ConnNameA.A0) {
+        if (ConnName == ConnNameA.ConnNameA_A0) {
             p0 = new MicrobitPin(DigitalPin.P0);
             p1 = new MicrobitPin(DigitalPin.P1);
         }
-        else if (ConnName == ConnNameA.A1) {
+        else if (ConnName == ConnNameA.ConnNameA_A1) {
             p0 = new MicrobitPin(DigitalPin.P1);
             p1 = new MicrobitPin(DigitalPin.P2);
         }
-        else if (ConnName == ConnNameA.A2) {
+        else if (ConnName == ConnNameA.ConnNameA_A2) {
             p0 = new MicrobitPin(DigitalPin.P2);
             p1 = new MicrobitPin(DigitalPin.P3);
         }
@@ -79,19 +79,19 @@ namespace czyminode {
         let i: number = 0;
         let rgb2: number = rgb;
 
-        if (ConnName == ConnNameD.D12) {
+        if (ConnName == ConnNameD.ConnNameD_D12) {
             clock = new MicrobitPin(DigitalPin.P12);
             data = new MicrobitPin(DigitalPin.P13);
         }
-        else if (ConnName == ConnNameD.D13) {
+        else if (ConnName == ConnNameD.ConnNameD_D13) {
             clock = new MicrobitPin(DigitalPin.P13);
             data = new MicrobitPin(DigitalPin.P14);
         }
-        else if (ConnName == ConnNameD.D14) {
+        else if (ConnName == ConnNameD.ConnNameD_D14) {
             clock = new MicrobitPin(DigitalPin.P14);
             data = new MicrobitPin(DigitalPin.P15);
         }
-        else if (ConnName == ConnNameD.D15) {
+        else if (ConnName == ConnNameD.ConnNameD_D15) {
             clock = new MicrobitPin(DigitalPin.P15);
             data = new MicrobitPin(DigitalPin.P16);
         }
@@ -130,26 +130,10 @@ namespace czyminode {
      * SpeakerOut
      */
     //% blockId=Speaker_Out
-    //% block
-    export function SpeakerOut(ConnName: ConnNameA, vol: number): void {
-        let p0: AnalogOutPin;
-        let p1: AnalogOutPin;
-
-        if (ConnName == ConnNameA.A0) {
-            p0 = new MicrobitPin(DigitalPin.P0);
-            p1 = new MicrobitPin(DigitalPin.P1);
-        }
-        else if (ConnName == ConnNameA.A1) {
-            p0 = new MicrobitPin(DigitalPin.P1);
-            p1 = new MicrobitPin(DigitalPin.P2);
-        }
-        else if (ConnName == ConnNameA.A2) {
-            p0 = new MicrobitPin(DigitalPin.P2);
-            p1 = new MicrobitPin(DigitalPin.P3);
-        }
-
-        p0.analogWrite(vol);
-        p1.analogWrite(vol);
+    //% block="SpeakerOut %connName| volume %vol | frequency %frequency | ms %ms"
+    //% shim=czyminode::SpeakerOut
+    export function SpeakerOut(ConnName: ConnNameA, vol: number, frequency:number,ms:number): void {
+        return;
     }
 
     /**
@@ -157,8 +141,9 @@ namespace czyminode {
      */
     //% blockId=test
     //% block
-    //% shim=speaker::test
+    //% shim=czyminode::test
     export function test(a: number, b: number): number {
+        console.log("test func");
         return 0;
     }
 
@@ -177,19 +162,19 @@ namespace czyminode {
         let humi: number;
         //let str: string;
         //let bitarr: number[] = [0,0,0,0,0,0,0,0];
-        if (connName == ConnNameD.D12) {
+        if (connName == ConnNameD.ConnNameD_D12) {
             p0 = new MicrobitPin(DigitalPin.P12);
             p1 = new MicrobitPin(DigitalPin.P13);
         }
-        else if (connName == ConnNameD.D13) {
+        else if (connName == ConnNameD.ConnNameD_D13) {
             p0 = new MicrobitPin(DigitalPin.P13);
             p1 = new MicrobitPin(DigitalPin.P14);
         }
-        else if (connName == ConnNameD.D14) {
+        else if (connName == ConnNameD.ConnNameD_D14) {
             p0 = new MicrobitPin(DigitalPin.P14);
             p1 = new MicrobitPin(DigitalPin.P15);
         }
-        else if (connName == ConnNameD.D15) {
+        else if (connName == ConnNameD.ConnNameD_D15) {
             p0 = new MicrobitPin(DigitalPin.P15);
             p1 = new MicrobitPin(DigitalPin.P16);
         }
@@ -308,19 +293,19 @@ namespace czyminode {
         let i: number;
         let data: number;
         let humi: number;
-        if (connName == ConnNameD.D12) {
+        if (connName == ConnNameD.ConnNameD_D12) {
             p0 = new MicrobitPin(DigitalPin.P12);
             p1 = new MicrobitPin(DigitalPin.P13);
         }
-        else if (connName == ConnNameD.D13) {
+        else if (connName == ConnNameD.ConnNameD_D13) {
             p0 = new MicrobitPin(DigitalPin.P13);
             p1 = new MicrobitPin(DigitalPin.P14);
         }
-        else if (connName == ConnNameD.D14) {
+        else if (connName == ConnNameD.ConnNameD_D14) {
             p0 = new MicrobitPin(DigitalPin.P14);
             p1 = new MicrobitPin(DigitalPin.P15);
         }
-        else if (connName == ConnNameD.D15) {
+        else if (connName == ConnNameD.ConnNameD_D15) {
             p0 = new MicrobitPin(DigitalPin.P15);
             p1 = new MicrobitPin(DigitalPin.P16);
         }
@@ -393,19 +378,19 @@ namespace czyminode {
         let lastV: boolean;
         let V: boolean;
         let i: number;
-        if (connName == ConnNameD.D12) {
+        if (connName == ConnNameD.ConnNameD_D12) {
             p0 = pins.P12;
             p1 = pins.P13;
         }
-        else if (connName == ConnNameD.D13) {
+        else if (connName == ConnNameD.ConnNameD_D13) {
             p0 = new MicrobitPin(DigitalPin.P13);
             p1 = new MicrobitPin(DigitalPin.P14);
         }
-        else if (connName == ConnNameD.D14) {
+        else if (connName == ConnNameD.ConnNameD_D14) {
             p0 = new MicrobitPin(DigitalPin.P14);
             p1 = new MicrobitPin(DigitalPin.P15);
         }
-        else if (connName == ConnNameD.D15) {
+        else if (connName == ConnNameD.ConnNameD_D15) {
             p0 = new MicrobitPin(DigitalPin.P15);
             p1 = new MicrobitPin(DigitalPin.P16);
         }
@@ -439,19 +424,19 @@ namespace czyminode {
     export function switchIsOpened(connName: ConnNameD): boolean {
         let p0: DigitalInOutPin;
         let p1: DigitalInOutPin;
-        if (connName == ConnNameD.D12) {
+        if (connName == ConnNameD.ConnNameD_D12) {
             p0 = new MicrobitPin(DigitalPin.P12);
             p1 = new MicrobitPin(DigitalPin.P13);
         }
-        else if (connName == ConnNameD.D13) {
+        else if (connName == ConnNameD.ConnNameD_D13) {
             p0 = new MicrobitPin(DigitalPin.P13);
             p1 = new MicrobitPin(DigitalPin.P14);
         }
-        else if (connName == ConnNameD.D14) {
+        else if (connName == ConnNameD.ConnNameD_D14) {
             p0 = new MicrobitPin(DigitalPin.P14);
             p1 = new MicrobitPin(DigitalPin.P15);
         }
-        else if (connName == ConnNameD.D15) {
+        else if (connName == ConnNameD.ConnNameD_D15) {
             p0 = new MicrobitPin(DigitalPin.P15);
             p1 = new MicrobitPin(DigitalPin.P16);
         }
@@ -467,15 +452,15 @@ namespace czyminode {
         let p0: AnalogInPin;
         let p1: AnalogInPin;
 
-        if (connName == ConnNameA.A0) {
+        if (connName == ConnNameA.ConnNameA_A0) {
             p0 = new MicrobitPin(DigitalPin.P0);
             p1 = new MicrobitPin(DigitalPin.P1);
         }
-        else if (connName == ConnNameA.A1) {
+        else if (connName == ConnNameA.ConnNameA_A1) {
             p0 = new MicrobitPin(DigitalPin.P1);
             p1 = new MicrobitPin(DigitalPin.P2);
         }
-        else if (connName == ConnNameA.A2) {
+        else if (connName == ConnNameA.ConnNameA_A2) {
             p0 = new MicrobitPin(DigitalPin.P2);
             p1 = new MicrobitPin(DigitalPin.P3);
         }
@@ -500,15 +485,15 @@ namespace czyminode {
     export function MicGetVol(connName: ConnNameA): number {
         let p0: AnalogInPin;
         let p1: AnalogInPin;
-        if (connName == ConnNameA.A0) {
+        if (connName == ConnNameA.ConnNameA_A0) {
             p0 = new MicrobitPin(DigitalPin.P0);
             p1 = new MicrobitPin(DigitalPin.P1);
         }
-        else if (connName == ConnNameA.A1) {
+        else if (connName == ConnNameA.ConnNameA_A1) {
             p0 = new MicrobitPin(DigitalPin.P1);
             p1 = new MicrobitPin(DigitalPin.P2);
         }
-        else if (connName == ConnNameA.A2) {
+        else if (connName == ConnNameA.ConnNameA_A2) {
             p0 = new MicrobitPin(DigitalPin.P2);
             p1 = new MicrobitPin(DigitalPin.P3);
         }
@@ -524,15 +509,15 @@ namespace czyminode {
         let lastVal: number;
         let p0: AnalogInPin;
         let p1: AnalogInPin;
-        if (connName == ConnNameA.A0) {
+        if (connName == ConnNameA.ConnNameA_A0) {
             p0 = new MicrobitPin(DigitalPin.P0);
             p1 = new MicrobitPin(DigitalPin.P1);
         }
-        else if (connName == ConnNameA.A1) {
+        else if (connName == ConnNameA.ConnNameA_A1) {
             p0 = new MicrobitPin(DigitalPin.P1);
             p1 = new MicrobitPin(DigitalPin.P2);
         }
-        else if (connName == ConnNameA.A2) {
+        else if (connName == ConnNameA.ConnNameA_A2) {
             p0 = new MicrobitPin(DigitalPin.P2);
             p1 = new MicrobitPin(DigitalPin.P3);
         }
@@ -557,15 +542,15 @@ namespace czyminode {
     export function RotaryGetPercentage(connName: ConnNameA): number {
         let p0: AnalogInPin;
         let p1: AnalogInPin;
-        if (connName == ConnNameA.A0) {
+        if (connName == ConnNameA.ConnNameA_A0) {
             p0 = new MicrobitPin(DigitalPin.P0);
             p1 = new MicrobitPin(DigitalPin.P1);
         }
-        else if (connName == ConnNameA.A1) {
+        else if (connName == ConnNameA.ConnNameA_A1) {
             p0 = new MicrobitPin(DigitalPin.P1);
             p1 = new MicrobitPin(DigitalPin.P2);
         }
-        else if (connName == ConnNameA.A2) {
+        else if (connName == ConnNameA.ConnNameA_A2) {
             p0 = new MicrobitPin(DigitalPin.P2);
             p1 = new MicrobitPin(DigitalPin.P3);
         }
@@ -581,19 +566,19 @@ namespace czyminode {
     export function onPIREvent(connName: ConnNameD, body: () => void): void {
         let p0: DigitalInOutPin;
         let p1: DigitalInOutPin;
-        if (connName == ConnNameD.D12) {
+        if (connName == ConnNameD.ConnNameD_D12) {
             p0 = new MicrobitPin(DigitalPin.P12);
             p1 = new MicrobitPin(DigitalPin.P13);
         }
-        else if (connName == ConnNameD.D13) {
+        else if (connName == ConnNameD.ConnNameD_D13) {
             p0 = new MicrobitPin(DigitalPin.P13);
             p1 = new MicrobitPin(DigitalPin.P14);
         }
-        else if (connName == ConnNameD.D14) {
+        else if (connName == ConnNameD.ConnNameD_D14) {
             p0 = new MicrobitPin(DigitalPin.P14);
             p1 = new MicrobitPin(DigitalPin.P15);
         }
-        else if (connName == ConnNameD.D15) {
+        else if (connName == ConnNameD.ConnNameD_D15) {
             p0 = new MicrobitPin(DigitalPin.P15);
             p1 = new MicrobitPin(DigitalPin.P16);
         }
@@ -617,19 +602,19 @@ namespace czyminode {
     export function PIRIsTriggered(connName: ConnNameD): boolean {
         let p0: DigitalInOutPin;
         let p1: DigitalInOutPin;
-        if (connName == ConnNameD.D12) {
+        if (connName == ConnNameD.ConnNameD_D12) {
             p0 = new MicrobitPin(DigitalPin.P12);
             p1 = new MicrobitPin(DigitalPin.P13);
         }
-        else if (connName == ConnNameD.D13) {
+        else if (connName == ConnNameD.ConnNameD_D13) {
             p0 = new MicrobitPin(DigitalPin.P13);
             p1 = new MicrobitPin(DigitalPin.P14);
         }
-        else if (connName == ConnNameD.D14) {
+        else if (connName == ConnNameD.ConnNameD_D14) {
             p0 = new MicrobitPin(DigitalPin.P14);
             p1 = new MicrobitPin(DigitalPin.P15);
         }
-        else if (connName == ConnNameD.D15) {
+        else if (connName == ConnNameD.ConnNameD_D15) {
             p0 = new MicrobitPin(DigitalPin.P15);
             p1 = new MicrobitPin(DigitalPin.P16);
         }
@@ -643,15 +628,15 @@ namespace czyminode {
     export function onLightSensorEvent(connName: ConnNameA, body: () => void): void {
         let p0: AnalogInPin;
         let p1: AnalogInPin;
-        if (connName == ConnNameA.A0) {
+        if (connName == ConnNameA.ConnNameA_A0) {
             p0 = new MicrobitPin(DigitalPin.P0);
             p1 = new MicrobitPin(DigitalPin.P1);
         }
-        else if (connName == ConnNameA.A1) {
+        else if (connName == ConnNameA.ConnNameA_A1) {
             p0 = new MicrobitPin(DigitalPin.P1);
             p1 = new MicrobitPin(DigitalPin.P2);
         }
-        else if (connName == ConnNameA.A2) {
+        else if (connName == ConnNameA.ConnNameA_A2) {
             p0 = new MicrobitPin(DigitalPin.P2);
             p1 = new MicrobitPin(DigitalPin.P3);
         }
@@ -673,15 +658,15 @@ namespace czyminode {
     export function LightSensorGetLevel(connName: ConnNameA): number {
         let p0: AnalogInPin;
         let p1: AnalogInPin;
-        if (connName == ConnNameA.A0) {
+        if (connName == ConnNameA.ConnNameA_A0) {
             p0 = new MicrobitPin(DigitalPin.P0);
             p1 = new MicrobitPin(DigitalPin.P1);
         }
-        else if (connName == ConnNameA.A1) {
+        else if (connName == ConnNameA.ConnNameA_A1) {
             p0 = new MicrobitPin(DigitalPin.P1);
             p1 = new MicrobitPin(DigitalPin.P2);
         }
-        else if (connName == ConnNameA.A2) {
+        else if (connName == ConnNameA.ConnNameA_A2) {
             p0 = new MicrobitPin(DigitalPin.P2);
             p1 = new MicrobitPin(DigitalPin.P3);
         }
@@ -699,19 +684,19 @@ namespace czyminode {
 
         let p0: DigitalInOutPin;
         let p1: DigitalInOutPin;
-        if (connName == ConnNameD.D12) {
+        if (connName == ConnNameD.ConnNameD_D12) {
             p0 = pins.P12;
             p1 = pins.P13;
         }
-        else if (connName == ConnNameD.D13) {
+        else if (connName == ConnNameD.ConnNameD_D13) {
             p0 = new MicrobitPin(DigitalPin.P13);
             p1 = new MicrobitPin(DigitalPin.P14);
         }
-        else if (connName == ConnNameD.D14) {
+        else if (connName == ConnNameD.ConnNameD_D14) {
             p0 = new MicrobitPin(DigitalPin.P14);
             p1 = new MicrobitPin(DigitalPin.P15);
         }
-        else if (connName == ConnNameD.D15) {
+        else if (connName == ConnNameD.ConnNameD_D15) {
             p0 = new MicrobitPin(DigitalPin.P15);
             p1 = new MicrobitPin(DigitalPin.P16);
         }
