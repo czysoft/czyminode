@@ -1,6 +1,6 @@
 {
     "name": "czy hardware",
-    "version": "0.0.0",
+    "version": "1.0.0",
     "description": "stm32 minode ...",
     "license": "MIT",
     "dependencies": {
@@ -8,14 +8,14 @@
         "radio": "*",
         "microphone": "*"
     },
-  "files": [
-    "README.md",
-    "main.blocks",
-    "czyminode.ts",
-    "shims.d.ts",
-    "enums.d.ts",
-    "libs/czyminode.cpp"
-  ],
+    "files": [
+        "README.md",
+        "main.blocks",
+        "czyminode.ts",
+        "shims.d.ts",
+        "enums.d.ts",
+        "libs/czyminode.cpp"
+    ],
     "testFiles": [
         "test.ts"
     ],
@@ -24,5 +24,4 @@
         "microbit"
     ],
     "preferredEditor": "blocksprj"
-    
 }
