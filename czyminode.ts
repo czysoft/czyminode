@@ -1,5 +1,6 @@
 
 
+let OLED_GRAM: number[][] = [];
 //% color=190 weight=100 icon="\uf1ec" block="czy hardware"
 //% groups=['hardware', 'hardware', 'others']
 namespace czyminode {
@@ -701,5 +702,208 @@ namespace czyminode {
             p1 = new MicrobitPin(DigitalPin.P16);
         }
         p0.digitalWrite(status == SwitchStatus.SWITCH_OPEN);
+    }
+
+    /**
+     * i2c
+     */
+    //% blockId=i2c_ssd1306oledInit block="i2c_ssd1306oledInit address:%address"
+    //% advanced=true
+    export function i2c_ssd1306oledInit(address: number): void {
+        let i: number;
+        let j: number;
+        OLED_GRAM = [];
+        for (i = 0; i < 144; i++) {
+            let tmp: number[] = [0, 0, 0, 0, 0, 0, 0, 0];
+
+            OLED_GRAM.push(tmp);
+        }
+
+        pins.i2cWriteNumber(address, 0xae, NumberFormat.Int16BE, false);        //--turn off oled panel
+        pins.i2cWriteNumber(address, 0, NumberFormat.Int16BE, false);           //---set low column address
+        pins.i2cWriteNumber(address, 0x10, NumberFormat.Int16BE, false);        //---set high column address
+        pins.i2cWriteNumber(address, 0x40, NumberFormat.Int16BE, false);        //--set start line address  Set Mapping RAM Display Start Line (0x00~0x3F)
+        pins.i2cWriteNumber(address, 0x81, NumberFormat.Int16BE, false);        //--set contrast control register
+        pins.i2cWriteNumber(address, 0xCF, NumberFormat.Int16BE, false);        // Set SEG Output Current Brightness
+        pins.i2cWriteNumber(address, 0xA1, NumberFormat.Int16BE, false);        //--Set SEG/Column Mapping     0xa0左右反置 0xa1正常
+        pins.i2cWriteNumber(address, 0xC8, NumberFormat.Int16BE, false);        //Set COM/Row Scan Direction   0xc0上下反置 0xc8正常
+        pins.i2cWriteNumber(address, 0xA6, NumberFormat.Int16BE, false);        //--set normal display
+        pins.i2cWriteNumber(address, 0xA8, NumberFormat.Int16BE, false);
+        pins.i2cWriteNumber(address, 0x3f, NumberFormat.Int16BE, false);
+        pins.i2cWriteNumber(address, 0xD3, NumberFormat.Int16BE, false);
+        pins.i2cWriteNumber(address, 0x00, NumberFormat.Int16BE, false);
+        pins.i2cWriteNumber(address, 0xd5, NumberFormat.Int16BE, false);
+        pins.i2cWriteNumber(address, 0x80, NumberFormat.Int16BE, false);
+        pins.i2cWriteNumber(address, 0xD9, NumberFormat.Int16BE, false);
+        pins.i2cWriteNumber(address, 0xF1, NumberFormat.Int16BE, false);
+        pins.i2cWriteNumber(address, 0xDA, NumberFormat.Int16BE, false);
+        pins.i2cWriteNumber(address, 0x12, NumberFormat.Int16BE, false);
+        pins.i2cWriteNumber(address, 0xDB, NumberFormat.Int16BE, false);
+        pins.i2cWriteNumber(address, 0x40, NumberFormat.Int16BE, false);
+        pins.i2cWriteNumber(address, 0x20, NumberFormat.Int16BE, false);
+        pins.i2cWriteNumber(address, 0x02, NumberFormat.Int16BE, false);
+        pins.i2cWriteNumber(address, 0x8D, NumberFormat.Int16BE, false);
+        pins.i2cWriteNumber(address, 0x14, NumberFormat.Int16BE, false);
+        pins.i2cWriteNumber(address, 0xA4, NumberFormat.Int16BE, false);
+        pins.i2cWriteNumber(address, 0xA6, NumberFormat.Int16BE, false);
+        i2c_ssd1306oledClear(address);
+        //pins.i2cWriteNumber(address, 0x2e, NumberFormat.Int16BE, false);        //关闭滚动
+        pins.i2cWriteNumber(address, 0xAF, NumberFormat.Int16BE, false);
+
+    }
+    /**
+     * i2c_ssd1306oledClear
+     */
+    //% blockId=i2c_ssd1306oledClear block="i2c_ssd1306oledClear address:%address"
+    //% advanced=true
+    export function i2c_ssd1306oledClear(address: number): void {
+        let i: number;
+        let j: number;
+        for (i = 0; i < 144; i++) {
+            for (j = 0; j < 8; j++) {
+                OLED_GRAM[i][j] = 0;
+            }
+        }
+        let buf: Buffer = Buffer.create(1 + 128);
+        buf[0] = 0x40;
+        for (i = 0; i < 8; i++) {
+            pins.i2cWriteNumber(address, 0xb0 + i, NumberFormat.Int16BE, false);            //设置页地址
+            pins.i2cWriteNumber(address, 0, NumberFormat.Int16BE, false);                   //设置低列起始地址
+            pins.i2cWriteNumber(address, 0x10, NumberFormat.Int16BE, false);                //设置高列起始地址
+
+            pins.i2cWriteBuffer(address, buf, false);
+        }
+    }
+    /**
+     * i2c_ssd1306oledRefresh
+     */
+    //% blockId=i2c_ssd1306oledRefresh block="i2c_ssd1306oledRefresh address:%address"
+    //% advanced=true
+    export function i2c_ssd1306oledRefresh(address: number): void {
+        let i: number;
+        let n: number;
+        let buf: Buffer = Buffer.create(129);
+        buf[0] = 0x40;
+        for (i = 0; i < 8; i++) {
+            pins.i2cWriteNumber(address, 0xb0 + i, NumberFormat.Int16BE, false);            //设置行起始地址
+            pins.i2cWriteNumber(address, 0, NumberFormat.Int16BE, false);                   //设置低列起始地址
+            pins.i2cWriteNumber(address, 0x10, NumberFormat.Int16BE, false);                //设置高列起始地址
+
+            for (n = 0; n < 128; n++)
+                buf[n + 1] = OLED_GRAM[n][i];
+            pins.i2cWriteBuffer(address, buf, false);
+        }
+
+    }
+    /**
+     * i2c_ssd1306oledPixel
+     */
+    //% blockId=i2c_ssd1306oledPixel block="i2c_ssd1306oledPixel address:%address | x:%x | y:%y | show:%show | direct:%direct"
+    //% advanced=true
+    export function i2c_ssd1306oledPixel(address: number, x: number, y: number, show: boolean, direct:boolean): void {
+        let i: number=y/8;
+        let m: number=y%8;
+        let n: number=1<<m;
+
+        if (show) {
+            OLED_GRAM[x][i] |= n;
+        }
+        else {
+            OLED_GRAM[x][i] = ~OLED_GRAM[x][i];
+            OLED_GRAM[x][i] |= n;
+            OLED_GRAM[x][i] = ~OLED_GRAM[x][i];
+        }
+        if (direct) {
+            pins.i2cWriteNumber(address, 0xb0 + i, NumberFormat.Int16BE, false);                    //设置页地址
+            pins.i2cWriteNumber(address, x & 0xf, NumberFormat.Int16BE, false);                     //设置低列起始地址
+            pins.i2cWriteNumber(address, 0x10 + ((x & 0xf0) >> 4), NumberFormat.Int16BE, false);                //设置高列起始地址
+
+            pins.i2cWriteNumber(address, 0x4000 + OLED_GRAM[x][i], NumberFormat.UInt16BE, false);
+        }
+    }
+    /**
+     * i2c_ssd1306oledDrawLine
+     */
+    //% blockId=i2c_ssd1306oledDrawLine block="i2c_ssd1306oledDrawLine address:%address | x1:%x1 | y1:%y1 | x2:%x2 | y2:%y2 | show:%show | direct:%direct"
+    //% advanced=true
+    export function i2c_ssd1306oledDrawLine(address: number, x1: number, y1: number, x2: number, y2: number, show: boolean, direct: boolean): void {
+        
+        let t: number; 
+        let xerr: number = 0, yerr: number = 0, delta_x: number, delta_y: number, distance: number;
+        let incx: number, incy: number, uRow: number, uCol: number;
+
+        delta_x = x2 - x1; //计算坐标增量 
+        delta_y = y2 - y1;
+        uRow = x1;//画线起点坐标
+        uCol = y1;
+        if (delta_x > 0)
+            incx = 1; //设置单步方向 
+        else if (delta_x == 0)
+            incx = 0;//垂直线 
+        else
+        {
+            incx = -1;
+            delta_x = -delta_x;
+        }
+        if (delta_y > 0)
+            incy = 1;
+        else if (delta_y == 0)
+            incy = 0;//水平线 
+        else {
+            incy = -1;
+            delta_y = -delta_x;
+        }
+        if (delta_x > delta_y)
+            distance = delta_x; //选取基本增量坐标轴 
+        else
+            distance = delta_y;
+
+        for (t = 0; t < distance + 1; t++) {
+            //console.log(uRow + ":" + uCol);
+            i2c_ssd1306oledPixel(address,uRow, uCol,show, false);//画点
+            xerr += delta_x;
+            yerr += delta_y;
+            if (xerr > distance) {
+                xerr -= distance;
+                uRow += incx;
+            }
+            if (yerr > distance) {
+                yerr -= distance;
+                uCol += incy;
+            }
+        }
+        if (direct)
+            i2c_ssd1306oledRefresh(address);
+    }/**
+     * i2c_ssd1306oledDrawCircle
+     */
+    //% blockId=i2c_ssd1306oledDrawCircle block="i2c_ssd1306oledDrawCircle address:%address | x:%x | y:%y | r:%r | show:%show | direct:%direct"
+    //% advanced=true
+    export function i2c_ssd1306oledDrawCircle(address: number, x: number, y: number, r: number, show: boolean, direct: boolean): void {
+
+        let a: number, b: number, num: number;
+        a = 0;
+        b = r;
+        while (2 * b * b >= r * r) {
+            console.log((x + a) + ":" + (y - b));
+            i2c_ssd1306oledPixel(address, x + a, y - b, show,false);
+            i2c_ssd1306oledPixel(address, x - a, y - b, show, false);
+            i2c_ssd1306oledPixel(address, x - a, y + b, show, false);
+            i2c_ssd1306oledPixel(address, x + a, y + b, show, false);
+
+            i2c_ssd1306oledPixel(address, x + b, y + a, show, false);
+            i2c_ssd1306oledPixel(address, x + b, y - a, show, false);
+            i2c_ssd1306oledPixel(address, x - b, y - a, show, false);
+            i2c_ssd1306oledPixel(address, x - b, y + a, show, false);
+
+            a++;
+            num = (a * a + b * b) - r * r;//计算画的点离圆心的距离
+            if (num > 0) {
+                b--;
+                a--;
+            }
+        }
+        if (direct)
+            i2c_ssd1306oledRefresh(address);
     }
 }
