@@ -79,6 +79,14 @@ enum SwitchStatus {
     //% block="close" enumval=2
     SWITCH_CLOSE = 2,
 };
+enum SpeakerChannel {
+    //% block="left" enumval=1
+    SPEAKER_LEFT = 1,
+    //% block="right" enumval=2
+    SPEAKER_RIGHT = 2,
+    //% block="stereo" enumval=2
+    SPEAKER_STEREO = 3,
+};
 namespace czyminode {
 
 
@@ -89,27 +97,53 @@ namespace czyminode {
 	}
 
 	//%
-	void SpeakerOut(AnalogConnName ConnName, int vol, int frequency,int ms)
+	void SpeakerOut(AnalogConnName ConnName, SpeakerChannel channel, int vol, int frequency,int ms)
 	{
-        bool b1 = true;
+        //bool b1 = true;
         //uBit.io.P16.getDigitalValue
-
+        char buf[50];
         MicroBitPin* p0;
-		if (ConnName == Analog_A0)
-			p0 = getPin(MICROBIT_ID_IO_P0);
-		else if (ConnName == Analog_A1)
-			p0 = getPin(MICROBIT_ID_IO_P1);
-		else if (ConnName == Analog_A2)
-			p0 = getPin(MICROBIT_ID_IO_P2);
+        MicroBitPin* p1;
+        if (ConnName == Analog_A0) {
+            p0 = getPin(MICROBIT_ID_IO_P0);
+            p1 = getPin(MICROBIT_ID_IO_P1);
+        }
+        else if (ConnName == Analog_A1) {
+            p0 = getPin(MICROBIT_ID_IO_P1);
+            p1 = getPin(MICROBIT_ID_IO_P2);
+        }
+        else if (ConnName == Analog_A2) {
+            p0 = getPin(MICROBIT_ID_IO_P2);
+            p1 = getPin(MICROBIT_ID_IO_P3);
+        }
         else
         {
-            uBit.serial.printf("ConnName error\r\n");
+            sprintf(buf, "ConnName:%d error\r\n", ConnName);
+            uBit.serial.printf(buf);
             return;
         }
-        p0->setAnalogValue(vol);
-        p0->setAnalogPeriodUs(1000000 / frequency);
-        sleep_us(ms*1000);
-        p0->setAnalogValue(0);
+        if (channel == SPEAKER_LEFT) {
+            p0->setAnalogValue(vol);
+            p0->setAnalogPeriodUs(1000000 / frequency);
+            sleep_us(ms * 1000);
+            p0->setAnalogValue(0);
+        }
+        else if (channel == SPEAKER_RIGHT) {
+            p1->setAnalogValue(vol);
+            p1->setAnalogPeriodUs(1000000 / frequency);
+            sleep_us(ms * 1000);
+            p1->setAnalogValue(0);
+        }
+        else if (channel == SPEAKER_STEREO) {
+            p0->setAnalogValue(vol);
+            p0->setAnalogPeriodUs(1000000 / frequency);
+            p1->setAnalogValue(vol);
+            p1->setAnalogPeriodUs(1000000 / frequency);
+            sleep_us(ms * 1000);
+            p0->setAnalogValue(0);
+            p1->setAnalogValue(0);
+        }
+
 
         ////fiber_sleep(ms);
         //for (int i = 0; i < 10000; i++)

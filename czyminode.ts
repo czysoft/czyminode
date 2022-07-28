@@ -131,9 +131,9 @@ namespace czyminode {
      * SpeakerOut
      */
     //% blockId=Speaker_Out
-    //% block="SpeakerOut %connName| volume %vol | frequency %frequency | ms %ms"
+    //% block="SpeakerOut %connName| channel %channel |volume %vol | frequency %frequency | ms %ms"
     //% shim=czyminode::SpeakerOut
-    export function SpeakerOut(ConnName: ConnNameA, vol: number, frequency:number,ms:number): void {
+    export function SpeakerOut(ConnName: AnalogConnName, channel: SpeakerChannel , vol: number, frequency:number,ms:number): void {
         return;
     }
 

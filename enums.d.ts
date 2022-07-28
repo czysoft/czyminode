@@ -83,4 +83,14 @@
     SWITCH_CLOSE = 2,
     }
 
+
+    declare const enum SpeakerChannel {
+    //% block="left" enumval=1
+    SPEAKER_LEFT = 1,
+    //% block="right" enumval=2
+    SPEAKER_RIGHT = 2,
+    //% block="stereo" enumval=2
+    SPEAKER_STEREO = 3,
+    }
+
 // Auto-generated. Do not edit. Really.
