@@ -118,9 +118,10 @@ namespace czyminode {
         }
         else
         {
+            p0 = getPin(MICROBIT_ID_IO_P0);
+            p1 = getPin(MICROBIT_ID_IO_P1);
             sprintf(buf, "ConnName:%d error\r\n", ConnName);
             uBit.serial.printf(buf);
-            return;
         }
         if (channel == SPEAKER_LEFT) {
             p0->setAnalogValue(vol);

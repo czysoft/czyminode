@@ -132,22 +132,52 @@ namespace czyminode {
      */
     //% blockId=Speaker_Out
     //% block="SpeakerOut %connName| channel %channel |volume %vol | frequency %frequency | ms %ms"
-    //% shim=czyminode::SpeakerOut
-    export function SpeakerOut(ConnName: AnalogConnName, channel: SpeakerChannel , vol: number, frequency:number,ms:number): void {
+    export function SpeakerOut(ConnName: AnalogConnName, channel: SpeakerChannel, vol: number, frequency: number, ms: number): void {
+        if (ConnName == AnalogConnName.Analog_A0) {
+            if (channel == SpeakerChannel.SPEAKER_LEFT) {
+                pins.setAudioPin(AnalogPin.P0);
+                pins.analogSetPitchPin(AnalogPin.P0);
+                pins.analogSetPitchVolume(vol);
+                pins.analogPitch(frequency, ms);
+            }
+            else if (channel == SpeakerChannel.SPEAKER_RIGHT) {
+                pins.setAudioPin(AnalogPin.P1);
+                pins.analogSetPitchPin(AnalogPin.P1);
+                pins.analogSetPitchVolume(vol);
+                pins.analogPitch(frequency, ms);
+            }
+        }
+        else if (ConnName == AnalogConnName.Analog_A1) {
+            if (channel == SpeakerChannel.SPEAKER_LEFT) {
+                pins.setAudioPin(AnalogPin.P1);
+                pins.analogSetPitchPin(AnalogPin.P1);
+                pins.analogSetPitchVolume(vol);
+                pins.analogPitch(frequency, ms);
+            }
+            else if (channel == SpeakerChannel.SPEAKER_RIGHT) {
+                pins.setAudioPin(AnalogPin.P2);
+                pins.analogSetPitchPin(AnalogPin.P2);
+                pins.analogSetPitchVolume(vol);
+                pins.analogPitch(frequency, ms);
+            }
+        }
+        else if (ConnName == AnalogConnName.Analog_A2) {
+            if (channel == SpeakerChannel.SPEAKER_LEFT) {
+                pins.setAudioPin(AnalogPin.P2);
+                pins.analogSetPitchPin(AnalogPin.P2);
+                pins.analogSetPitchVolume(vol);
+                pins.analogPitch(frequency, ms);
+            }
+            else if (channel == SpeakerChannel.SPEAKER_RIGHT) {
+                pins.setAudioPin(AnalogPin.P3);
+                pins.analogSetPitchPin(AnalogPin.P3);
+                pins.analogSetPitchVolume(vol);
+                pins.analogPitch(frequency, ms);
+            }
+        }
+        
         return;
     }
-
-    /**
-     * test
-     */
-    //% blockId=test
-    //% block
-    //% shim=czyminode::test
-    export function test(a: number, b: number): number {
-        console.log("test func");
-        return 0;
-    }
-
 
     /**
      * Get DHT11 temperature (celsius or fahrenheit).
