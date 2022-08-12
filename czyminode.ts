@@ -1,6 +1,11 @@
 
-
+let TM1637PinSCK: DigitalInOutPin;
+let TM1637PinSDA: DigitalInOutPin;
 let OLED_GRAM: number[][] = [];
+
+let NumberData: number[] = [ 0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 0x07, 0x7f, 0x6f, 0x00];
+let NumberDataDp: number[] = [ 0xbf, 0x86, 0xdb, 0xcf, 0xe6, 0xed, 0xfd, 0x87, 0xff, 0xef, 0x80];
+let delayTime = 1;
 //% color=190 weight=100 icon="\uf1ec" block="czy hardware"
 //% groups=['hardware', 'hardware', 'others']
 namespace czyminode {
@@ -935,5 +940,127 @@ namespace czyminode {
         }
         if (direct)
             i2c_ssd1306oledRefresh(address);
+    }
+
+
+    /**
+     *  TM1637 Init
+     */
+    //% blockId=TM1637_Init block="TM1637 Init pinSCL: %pinSCL |pinSDA %pinSDA "
+    export function TM1637(pinSCL: DigitalInOutPin, pinSDA: DigitalInOutPin): void {
+        TM1637PinSCK = pinSCL;
+        TM1637PinSDA = pinSDA;
+    }
+    /**
+     *  TM1637 Clear
+     */
+    //% blockId=TM1637_Clear block="TM1637 Clear"
+    export function TM1637Clear(): void {
+        TM1637_DATA_ClearDisplay();
+    }
+    /**
+     *  TM1637 Show Number
+     */
+    //% blockId=TM1637_Show_Number block="TM1637 Show Number %n"
+    export function TM1637ShowNumber(n: number): void {
+        TM1637_DATA_ClearDisplay();
+        TM1637_DATA_Display(n);
+    }
+
+    function I2C_Start():void
+    {
+        TM1637PinSCK.digitalWrite(true);
+        TM1637PinSDA.digitalWrite(true);
+        delayUs(delayTime);
+
+        TM1637PinSDA.digitalWrite(false);
+        delayUs(delayTime);
+        TM1637PinSCK.digitalWrite(false);
+        delayUs(delayTime);
+    }
+
+    function I2C_stop(): void
+    {
+        TM1637PinSCK.digitalWrite(false);
+        delayUs(delayTime);
+        TM1637PinSDA.digitalWrite(false);
+        delayUs(delayTime);
+
+        TM1637PinSCK.digitalWrite(true);
+        delayUs(delayTime);
+        TM1637PinSDA.digitalWrite(true);
+        delayUs(delayTime);
+    }
+
+    function TM1637_WriteBit(mBit:number): void
+    {
+        TM1637PinSCK.digitalWrite(false);
+        delayUs(delayTime);
+        if (mBit)
+            TM1637PinSDA.digitalWrite(true);
+        else
+            TM1637PinSDA.digitalWrite(false);
+        delayUs(delayTime);
+        TM1637PinSCK.digitalWrite(true);
+        delayUs(delayTime);
+    }
+
+    function TM1637_WriteByte(Byte: number): void
+    {
+        let loop: number = 0;
+        for (loop = 0; loop < 8; loop++) {
+            TM1637_WriteBit((Byte >> loop) & 0x01);//œ»–¥µÕŒª	
+        }
+        TM1637PinSCK.digitalWrite(false);
+        delayUs(delayTime);
+        TM1637PinSDA.digitalWrite(true);
+        delayUs(delayTime);
+        TM1637PinSCK.digitalWrite(true);
+    }
+    function TM1637_WriteCommand(mData: number): void
+    {
+        I2C_Start();
+        TM1637_WriteByte(mData);
+        I2C_stop();
+    }
+
+    function TM1637_WriteData(addr: number, mData: number): void
+    {
+        I2C_Start();
+        TM1637_WriteByte(addr);
+        TM1637_WriteByte(mData);
+        I2C_stop();
+    }
+
+    function TM1637_DATA_ClearDisplay(): void
+    {
+        let i: number;
+        TM1637_WriteCommand(0x44);
+        for (i = 0; i < 4; i++) {
+            TM1637_WriteData(0xc0 + i, 0);
+        }
+        TM1637_WriteCommand(0x88);
+    }
+    function TM1637_DATA_Display(n:number): void
+    {
+        let i: number;
+        TM1637_WriteCommand(0x44);
+        let str:string= n.toString();
+        let l = str.length;
+        let a = 0;
+        for (i = 0; i < 4; i++) {
+            if (i >= l) break;
+            let str2 = str.substr(l - i - 1, 1);
+            a = parseInt(str2);
+            TM1637_WriteData(0xc0 + (3 - i), NumberData[a]);
+            //(dpFlag)
+            //		TM1637_WriteData(0xc1,DataDp[FB.ge]);
+            //else
+            //TM1637_WriteData(0xc1,buf[FB.ge]);
+            //TM1637_WriteData(0xc2, buf[SB.shi]);
+            //TM1637_WriteData(0xc3, buf[SB.ge]);
+        }
+
+        TM1637_WriteCommand(0x88);
     }
 }
