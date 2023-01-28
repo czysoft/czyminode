@@ -187,7 +187,7 @@ namespace czyminode {
     /**
      * Get DHT11 temperature (celsius or fahrenheit).
      */
-    //% blockId=minode_dht_get_temperature block="dht11 %connName| tempreature %FanStatus" 
+    //% blockId=minode_dht_get_temperature block="dht11 %connName| tempreature %style"
     export function DHTGetTemperature(connName: ConnNameD, style: DHTTemStyle): number {
         let p0: DigitalInOutPin;
         let p1: DigitalInOutPin;
@@ -961,10 +961,10 @@ namespace czyminode {
     /**
      *  TM1637 Show Number
      */
-    //% blockId=TM1637_Show_Number block="TM1637 Show Number %n"
-    export function TM1637ShowNumber(n: number): void {
+    //% blockId=TM1637_Show_Number block="TM1637 Show Number %n | dpFlag %dpFlag | showZero %showZero"
+    export function TM1637ShowNumber(n: number, dpFlag: boolean, showZero: boolean): void {
         TM1637_DATA_ClearDisplay();
-        TM1637_DATA_Display(n);
+        TM1637_DATA_Display(n, dpFlag, showZero);
     }
 
     function I2C_Start():void
@@ -1041,7 +1041,7 @@ namespace czyminode {
         }
         TM1637_WriteCommand(0x88);
     }
-    function TM1637_DATA_Display(n:number): void
+    function TM1637_DATA_Display(n: number, dpFlag:boolean,showZero:boolean): void
     {
         let i: number;
         TM1637_WriteCommand(0x44);
@@ -1049,16 +1049,41 @@ namespace czyminode {
         let l = str.length;
         let a = 0;
         for (i = 0; i < 4; i++) {
-            if (i >= l) break;
+            if (i >= l) {
+                if (3 - i == 1) {
+                    if (dpFlag)
+                        if (showZero)
+                            TM1637_WriteData(0xc1, NumberDataDp[0]);
+                        else
+                            TM1637_WriteData(0xc1, NumberDataDp[10]);
+                    else {
+                        if (showZero)
+                            TM1637_WriteData(0xc1, NumberData[0]);
+                        else
+                            TM1637_WriteData(0xc1, NumberData[10]);
+                    }
+                }
+                else {
+                    if (showZero)
+                        TM1637_WriteData(0xc0 + (3 - i), NumberData[0]);
+                    else
+                        TM1637_WriteData(0xc0 + (3 - i), 0);
+                }
+                //if (!showZero)
+                //    break;
+                //else
+                    continue;
+            }
             let str2 = str.substr(l - i - 1, 1);
             a = parseInt(str2);
-            TM1637_WriteData(0xc0 + (3 - i), NumberData[a]);
-            //(dpFlag)
-            //		TM1637_WriteData(0xc1,DataDp[FB.ge]);
-            //else
-            //TM1637_WriteData(0xc1,buf[FB.ge]);
-            //TM1637_WriteData(0xc2, buf[SB.shi]);
-            //TM1637_WriteData(0xc3, buf[SB.ge]);
+            if (3 - i == 1) {
+                if (dpFlag)
+                    TM1637_WriteData(0xc1, NumberDataDp[a]);
+                else
+                    TM1637_WriteData(0xc1, NumberData[a]);
+            }
+            else
+                TM1637_WriteData(0xc0 + (3 - i), NumberData[a]);
         }
 
         TM1637_WriteCommand(0x88);
